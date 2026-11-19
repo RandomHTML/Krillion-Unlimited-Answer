@@ -17,10 +17,12 @@ const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 
 // Create variables
+const addForm = document.getElementById("add_section")
 const addButton = document.getElementById("add_btn")
 let addQuestionInput = document.getElementById("add_question_input").value
 let addAnswerInput = document.getElementById("add_answer_input").value
 const inputImg = document.getElementById("add_img")
+const findForm = document.getElementById("find_section")
 const findButton = document.getElementById("find_btn")
 let findAnswerInput = document.getElementById("find_question_input").value
 const outputImg = document.getElementById("find_img")
@@ -30,7 +32,9 @@ let displayText = document.querySelector(".display_text")
 
 // Add the section to input questions and answers to the database
 // Add event listener to the button when clicked to send information to the database and clear out the form
-addButton.addEventListener("click", async () => {
+addForm.addEventListener("submit", async (event) => {
+    event.preventDefault() // Stop the page refresh
+
     // Update the value of the variable before submitting to obtain latest information
     addQuestionInput = document.getElementById("add_question_input").value
     addAnswerInput = document.getElementById("add_answer_input").value
@@ -42,8 +46,10 @@ addButton.addEventListener("click", async () => {
     }
 
     // Update the databse with new information
-    await setDoc(doc(db, "Question and Answer Pair", addQuestionInput), {
-        answer: addAnswerInput
+    let question = addQuestionInput.charAt(0).toUpperCase() + (addQuestionInput.slice(1)).toLowerCase()
+    let answer = addAnswerInput.toLowerCase()
+    await setDoc(doc(db, "Question and Answer Pair", question), {
+        answer: answer
     })
 
     // Clear the form
@@ -54,13 +60,15 @@ addButton.addEventListener("click", async () => {
     inputImg.style.filter = "hue-rotate(240deg)"
     setTimeout(() => {
         inputImg.style.filter = "hue-rotate(0)"
-    }, 1000);
+    }, 1000)
 })
 
 // Add the section to find questions and answers from the database
 
 // Add event listener to the button when clicked to retrieve information from the database and clear out the form.
-findButton.addEventListener("click", async () => {
+findForm.addEventListener("submit", async (event) => {
+    event.preventDefault() // Stop the page refresh
+
     // Update the value of the variable before attempting to retrieve information from the database
     findAnswerInput = document.getElementById("find_question_input").value
 
@@ -77,23 +85,25 @@ findButton.addEventListener("click", async () => {
 
     // Iterates through each question to find one the matches and updates the answer output with it.
     for (const [count, pair] of Object.entries(questionsDictionary)) {
-        if (pair["id"].includes(findAnswerInput)) {
+        if ((pair["id"].toLowerCase()).includes(findAnswerInput.toLowerCase())) {
 
             // Create the div box to contain both the text and image
-            let container = document.createElement('div');
+            let container = document.createElement('div')
             container.classList.add("container")
 
-            // Create the clipboard copy element
-            let clipboardIMG = document.createElement('img');
-            clipboardIMG.classList.add("clipboard_img")
-            clipboardIMG.src = "images/clipboard.png";
-            clipboardIMG.addEventListener("click", async () => {
-                navigator.clipboard.writeText(pair["answer"])
-            })
-
             // Create the text
-            let answerText = document.createElement('p');
-            answerText.textContent = `${pair["id"]}: ${pair["answer"]}\n`
+            let answerText = document.createElement('p')
+            let question = pair["id"].charAt(0).toUpperCase() + pair["id"].slice(1)
+            let answer = pair["answer"].toLowerCase()
+            answerText.textContent = `${question}: ${answer}`
+
+            // Create the clipboard copy element
+            let clipboardIMG = document.createElement('img')
+            clipboardIMG.classList.add("clipboard_img")
+            clipboardIMG.src = "images/clipboard.png"
+            clipboardIMG.addEventListener("click", async () => {
+                navigator.clipboard.writeText(answer)
+            })
 
             // Add elements to page
             answerBox.appendChild(container)
@@ -124,9 +134,5 @@ findButton.addEventListener("click", async () => {
     outputImg.style.filter = "hue-rotate(240deg)"
     setTimeout(() => {
         outputImg.style.filter = "hue-rotate(0)"
-    }, 1000);
+    }, 1000)
 })
-
-function displayPopup(display_text) {
-
-}
