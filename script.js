@@ -117,6 +117,7 @@ findForm.addEventListener("submit", async (event) => {
             let clipboardIMG = document.createElement("img");
             clipboardIMG.classList.add("clipboard_img");
             clipboardIMG.src = "images/clipboard.png";
+            clipboardIMG.title = "Copy";
             clipboardIMG.addEventListener("click", async () => {
                 navigator.clipboard.writeText(answer);
             });
