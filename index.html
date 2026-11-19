@@ -10,23 +10,19 @@
 </head>
 
 <body>
-    <div class="section add_pair">
+    <form class="section add_pair" id="add_section">
         <h2>Add questions</h2>
         <input id="add_question_input" placeholder="Question"></input>
         <input id="add_answer_input" placeholder="Answer"></input>
-        <button id="add_btn"><img src="images/submit.png" alt="" id="add_img">Submit!</button>
-    </div>
-    <div class="section find_pair">
+        <button id="add_btn"><img src="images/submit.png" alt="" id="add_img"><span>Submit!</span></button>
+    </form>
+    <form class="section find_pair" id="find_section">
         <h2>Find answers</h2>
         <input id="find_question_input" placeholder="Any word in a question"></input>
-        <button id="find_btn"><img src="images/submit.png" alt="" id="find_img">Submit!</button>
-    </div>
+        <button id="find_btn"><img src="images/submit.png" alt="" id="find_img"><span>Submit!</span></button>
+    </form>
     <div class="answer_box">
         <p id="answer_text"></p>
-    </div>
-    <div class="display_box">
-        <p id="display_text"></p>
-        <img src="images/success.png" alt="X" id="tick">
     </div>
 
     <script src="script.js" type="module"></script>
