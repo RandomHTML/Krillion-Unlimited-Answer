@@ -120,6 +120,7 @@ findForm.addEventListener("submit", async (event) => {
             clipboardIMG.title = "Copy";
             clipboardIMG.addEventListener("click", async () => {
                 navigator.clipboard.writeText(answer);
+                displayText("Copied", "Good");
             });
 
             // Add elements to page
